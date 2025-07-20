@@ -1,0 +1,73 @@
+# Ignore build results
+bin/
+obj/
+*/bin/
+*/obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Rider
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+# Visual Studio for Mac
+.vscode/
+.vscode-test/
+
+# MacCatalyst & iOS
+*.xcuserstate
+*.xcworkspace
+*.xcodeproj
+*.plist
+*.mode1*
+*.mode2*
+*.pbxuser
+*.xccheckout
+*.moved-aside
+*.xcuserdatad/
+*.xcassets/
+*.DS_Store
+
+# Blazor auto-generated
+wwwroot/css/app.css
+wwwroot/css/app.min.css
+wwwroot/_framework/
+wwwroot/service-worker.js
+wwwroot/service-worker-assets.js
+wwwroot/manifest.json
+
+# Auto-generated from Razor Components
+**/Generated/
+**/TemporaryGeneratedFile_*.cs
+
+# Logs
+*.log
+
+# NuGet packages
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# IDE cache
+*.ide
+
+# SQLite local databases (if you use EF Core or local storage)
+*.db
+*.sqlite
+*.db-shm
+*.db-wal
+
+# Hot reload artifacts
+*.hotreload.*

@@ -1,0 +1,45 @@
+﻿@page "/"
+@using Doot.Models
+@using Doot.Services
+@inject IIssueService _issueService;
+
+<div class="custom-flex-row">
+    <div class="custom-h1 what-is-the-issue">What is the Issue?</div>
+    <input class="input-box seach-box" type="text" placeholder="Search" />
+
+    @foreach(var issue in knownIssues){
+        <div class="selectable-box">
+            <span>@issue.Id</span>
+            <span>@issue.Title</span>
+            <span>@issue.Description</span>
+        </div>
+    }
+
+</div>
+
+@code {
+    private List<KnownIssue> knownIssues;
+
+    protected override async Task OnInitializedAsync()
+    {
+        knownIssues = await _issueService.GetKnownIssues();
+    }
+}
+
+<style>
+    .what-is-the-issue{
+        margin-top: 50px;
+        font-size: 40px;
+    }
+
+    .seach-box{
+        font-size: 20px;
+        width: 50%;
+        margin-top: 20px;
+        background-image: url('/Images/search.png');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px 16px;
+        padding-right:40px;
+    }
+</style>

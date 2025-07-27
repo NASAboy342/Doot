@@ -8,35 +8,95 @@ using System.Threading.Tasks;
 
 namespace Doot.Repositories
 {
+    using Microsoft.EntityFrameworkCore;
     public class BaseRepository
     {
-        private readonly DbContext _context;
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
-        public BaseRepository(DbContext context)
+        public BaseRepository(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _context = context;
-            _context.Database.EnsureCreated();
+            _contextFactory = contextFactory;
         }
 
         public async Task<IEnumerable<T>> GetAllAsync<T>() where T : class
-            => await _context.Set<T>().ToListAsync();
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                return await context.Set<T>().ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in GetAllAsync<{typeof(T).Name}>: {ex.Message}", ex);
+            }
+        }
 
         public async Task<T?> GetByIdAsync<T>(int id) where T : class
-            => await _context.Set<T>().FindAsync(id);
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                return await context.Set<T>().FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in GetByIdAsync<{typeof(T).Name}>: {ex.Message}", ex);
+            }
+        }
 
         public async Task<IEnumerable<T>> FindAsync<T>(Expression<Func<T, bool>> predicate) where T : class
-            => await _context.Set<T>().Where(predicate).ToListAsync();
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                return await context.Set<T>().Where(predicate).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in FindAsync<{typeof(T).Name}>: {ex.Message}", ex);
+            }
+        }
 
         public async Task AddAsync<T>(T entity) where T : class
-            => await _context.Set<T>().AddAsync(entity);
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                await context.Set<T>().AddAsync(entity);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in AddAsync<{typeof(T).Name}>: {ex.Message}", ex);
+            }
+        }
 
-        public void Update<T>(T entity) where T : class
-            => _context.Set<T>().Update(entity);
+        public async Task UpdateAsync<T>(T entity) where T : class
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                context.Set<T>().Update(entity);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in UpdateAsync<{typeof(T).Name}>: {ex.Message}", ex);
+            }
+        }
 
-        public void Remove<T>(T entity) where T : class
-            => _context.Set<T>().Remove(entity);
-
-        public async Task SaveChangesAsync()
-            => await _context.SaveChangesAsync();
+        public async Task RemoveAsync<T>(T entity) where T : class
+        {
+            try
+            {
+                using var context = _contextFactory.CreateDbContext();
+                context.Set<T>().Remove(entity);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in RemoveAsync<{typeof(T).Name}>: {ex.Message}", ex);
+            }
+        }
     }
 }

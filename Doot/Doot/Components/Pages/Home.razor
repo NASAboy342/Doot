@@ -3,27 +3,51 @@
 @using Doot.Services
 @inject IIssueService _issueService;
 
-<div class="custom-flex-row">
-    <div class="custom-h1 what-is-the-issue">What is the Issue?</div>
-    <input class="input-box seach-box" type="text" placeholder="Search" />
+<ErrorBoundary ErrorContent="ErrorContent">
+    <ChildContent>
+        @if (_loadException != null)
+        {
+            throw _loadException;
+        }
+        <div class="custom-flex-row">
+            <div class="custom-h1 what-is-the-issue">What is the Issue?</div>
+            <input class="input-box seach-box" type="text" placeholder="Search" />
 
-    @foreach(var issue in knownIssues){
-        <div class="selectable-box">
-            <span>@issue.Id</span>
-            <span>@issue.Title</span>
-            <span>@issue.Description</span>
+            @foreach(var issue in knownIssues)
+            {
+                <div class="selectable-box">
+                    <span>@issue.Id</span>
+                    <span>@issue.Title</span>
+                    <span>@issue.Description</span>
+                </div>
+            }
         </div>
-    }
-
-</div>
+    </ChildContent>
+</ErrorBoundary>
 
 @code {
-    private List<KnownIssue> knownIssues;
+    private List<KnownIssue> knownIssues = new List<KnownIssue>();
+    private Exception? _loadException;
 
     protected override async Task OnInitializedAsync()
     {
-        knownIssues = await _issueService.GetKnownIssues();
+        try
+        {
+            knownIssues = await _issueService.GetKnownIssues();
+        }
+        catch (Exception ex)
+        {
+            _loadException = ex;
+        }
     }
+
+    private RenderFragment<Exception> ErrorContent => ex => builder =>
+    {
+        builder.OpenElement(0, "div");
+        builder.AddAttribute(1, "style", "color: red; font-weight: bold; margin: 20px;");
+        builder.AddContent(2, $"An error occurred: {ex.Message}");
+        builder.CloseElement();
+    };
 }
 
 <style>

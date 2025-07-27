@@ -1,5 +1,6 @@
 ﻿using Doot.Repositories;
 using Doot.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace Doot
@@ -16,14 +17,15 @@ namespace Doot
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
+
             builder.Services.AddMauiBlazorWebView();
-            builder.Services.AddSingleton<IIssueService, IssueService>();
-            builder.Services.AddSingleton<IIssueRepository, IssueRepository>();
-            
+            builder.Services.AddDbContextFactory<Doot.Repositories.AppDbContext>();
+            builder.Services.AddScoped<IIssueService, IssueService>();
+            builder.Services.AddScoped<IIssueRepository, IssueRepository>();
 
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
-    		builder.Logging.AddDebug();
+            builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

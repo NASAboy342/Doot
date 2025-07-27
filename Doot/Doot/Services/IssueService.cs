@@ -13,7 +13,7 @@ namespace Doot.Services
         private readonly IIssueRepository _issueRepository;
         public IssueService(IIssueRepository issueRepository)
         {
-            _issueRepository = issueRepository ?? throw new ArgumentNullException(nameof(issueRepository));
+            _issueRepository = issueRepository;
         }
         public async Task<List<KnownIssue>> GetKnownIssues()
         {

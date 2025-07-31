@@ -2,6 +2,7 @@
 @using Doot.Models
 @using Doot.Services
 @inject IIssueService _issueService;
+@inject IBotService _botService;
 <div class="custom-flex-row scrollable-content issue-detail">
     @if (_loadException != null)
     {
@@ -19,15 +20,26 @@
             <p><strong>ID:</strong> @_issue.Id</p>
             <p><strong>Description:</strong> @_issue.Description</p>
         </div>
+        <div class="issue-detail-box">
+            @foreach (var message in Messages)
+            {
+                <p>@message</p>
+            }
+        </div>
     }
 </div>
+<input type="text" class="input-box asking-box" placeholder="Ask anything" @bind="InputValue"
+    @onkeydown="HandleKeyPress" />
 
 @code {
+    public List<string> Messages { get; set; } = new List<string>();
     public string InputValue { get; set; } = string.Empty;
     public int Id { get; set; }
 
     private KnownIssue? _issue;
     private Exception? _loadException;
+
+    private bool IssyncPage { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,6 +57,48 @@
         {
             _loadException = ex;
         }
+    }
+
+    // listen to keypress of enter key
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(InputValue))
+            {
+                Messages.Add(InputValue);
+                InputValue = string.Empty;
+                await _botService.GetResponseAsync(Messages);
+                await Task.CompletedTask; // Simulate async operation
+            }
+
+            // Here you can add logic to process the input, e.g., send it to a service
+            await Task.CompletedTask; // Simulate async operation
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+
+    }
+
+
+
+    private async Task StartSyncPage()
+    {
+        IssyncPage = true;
+        while (IssyncPage)
+        {
+            StateHasChanged(); // Force UI update
+                               // Simulate a delay for the sync operation
+            await Task.Delay(100);
+        }
+    }
+
+    private void StopSyncPage()
+    {
+        IssyncPage = false;
+        StateHasChanged(); // Force UI update
     }
 }
 

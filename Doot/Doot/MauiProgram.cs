@@ -22,6 +22,7 @@ namespace Doot
             builder.Services.AddDbContextFactory<Doot.Repositories.AppDbContext>();
             builder.Services.AddScoped<IIssueService, IssueService>();
             builder.Services.AddScoped<IIssueRepository, IssueRepository>();
+            builder.Services.AddSingleton<IBotService, BotService>();
 
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();

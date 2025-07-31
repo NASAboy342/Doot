@@ -10,5 +10,6 @@ namespace Doot.Services
     public interface IIssueService
     {
         Task<List<KnownIssue>> GetKnownIssues();
+        Task<KnownIssue?> GetKnownIssuesById(int id);
     }
 }

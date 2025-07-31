@@ -3,27 +3,24 @@
 @using Doot.Services
 @inject IIssueService _issueService;
 
-<ErrorBoundary ErrorContent="ErrorContent">
-    <ChildContent>
-        @if (_loadException != null)
-        {
-            throw _loadException;
-        }
-        <div class="custom-flex-row">
-            <div class="custom-h1 what-is-the-issue">What is the Issue?</div>
-            <input class="input-box seach-box" type="text" placeholder="Search" />
+@if (_loadException != null)
+{
+    throw _loadException;
+}
+<div class="custom-flex-row scrollable-content">
+    <div class="custom-h1 what-is-the-issue">What is the Issue?</div>
+    <input class="input-box seach-box" type="text" placeholder="Search" />
 
-            @foreach(var issue in knownIssues)
-            {
-                <div class="selectable-box">
-                    <span>@issue.Id</span>
-                    <span>@issue.Title</span>
-                    <span>@issue.Description</span>
-                </div>
-            }
-        </div>
-    </ChildContent>
-</ErrorBoundary>
+    <div class="issue-list">
+        @foreach(var issue in knownIssues)
+        {
+            <NavLink class="selectable-box issue-box" href="@($"/issue-detail/{issue.Id}")">
+                <span>@issue.Id</span>
+                <span>@issue.Title</span>
+            </NavLink>
+        }
+    </div>
+</div>
 
 @code {
     private List<KnownIssue> knownIssues = new List<KnownIssue>();
@@ -40,14 +37,6 @@
             _loadException = ex;
         }
     }
-
-    private RenderFragment<Exception> ErrorContent => ex => builder =>
-    {
-        builder.OpenElement(0, "div");
-        builder.AddAttribute(1, "style", "color: red; font-weight: bold; margin: 20px;");
-        builder.AddContent(2, $"An error occurred: {ex.Message}");
-        builder.CloseElement();
-    };
 }
 
 <style>
@@ -65,5 +54,16 @@
         background-position: right 10px center;
         background-size: 16px 16px;
         padding-right:40px;
+    }
+    .issue-box{
+        font-size: 20px;
+        display: flex;
+        gap: 10px;
+    }
+    .issue-list{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
     }
 </style>

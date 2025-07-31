@@ -67,6 +67,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="LLamaSharp" Version="0.24.0" />
+        <PackageReference Include="LLamaSharp.Backend.MacMetal" Version="0.7.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -90,6 +92,10 @@
       <Content Update="wwwroot\Images\search.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="BotModel\" />
     </ItemGroup>
 
 </Project>

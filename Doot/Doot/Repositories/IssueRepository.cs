@@ -15,10 +15,5 @@ namespace Doot.Repositories
         {
         }
 
-        public async Task<List<KnownIssue>> GetAllKnownIssues()
-        {
-            var allKnowIssues = await GetAllAsync<KnownIssue>();
-            return allKnowIssues.ToList();
-        }
     }
 }

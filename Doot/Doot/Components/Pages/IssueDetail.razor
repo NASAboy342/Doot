@@ -1,0 +1,75 @@
+﻿@page "/issue-detail/{id:int}"
+@using Doot.Models
+@using Doot.Services
+@inject IIssueService _issueService;
+<div class="custom-flex-row scrollable-content issue-detail">
+    @if (_loadException != null)
+    {
+        throw _loadException;
+    }
+
+    @if (_issue == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="issue-detail-box">
+            <h2>@_issue.Title</h2>
+            <p><strong>ID:</strong> @_issue.Id</p>
+            <p><strong>Description:</strong> @_issue.Description</p>
+        </div>
+    }
+</div>
+
+@code {
+    public string InputValue { get; set; } = string.Empty;
+    public int Id { get; set; }
+
+    private KnownIssue? _issue;
+    private Exception? _loadException;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id <= 0)
+        {
+            _loadException = new ArgumentNullException(nameof(Id), "Issue ID cannot be null or empty.");
+            return;
+        }
+
+        try
+        {
+            _issue = await _issueService.GetKnownIssuesById(Id);
+        }
+        catch (Exception ex)
+        {
+            _loadException = ex;
+        }
+    }
+}
+
+<style>
+    .asking-box {
+        position: absolute;
+        width: 90%;
+        font-size: 20px;
+        margin: 20px;
+        bottom: 0px;
+    }
+
+    .issue-detail-box {
+        margin-top: 20px;
+    }
+
+    .issue-detail-box h2 {
+        margin-bottom: 10px;
+    }
+
+    .issue-detail-box p {
+        margin: 5px 0;
+    }
+
+    .issue-detail {
+        padding-bottom: 100px;
+    }
+</style>

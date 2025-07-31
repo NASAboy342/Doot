@@ -9,6 +9,5 @@ namespace Doot.Repositories
 {
     public interface IIssueRepository
     {
-        Task<List<KnownIssue>> GetAllKnownIssues();
     }
 }

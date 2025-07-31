@@ -1,4 +1,5 @@
-﻿using Doot.Models;
+﻿using Doot.Data;
+using Doot.Models;
 using Doot.Repositories;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,14 @@ namespace Doot.Services
         }
         public async Task<List<KnownIssue>> GetKnownIssues()
         {
-            var allKnowIssues = await _issueRepository.GetAllKnownIssues();
-            return allKnowIssues;
+            var allKnownIssuesFromBuildIn = BuildinKnowIssue.Get;
+
+            return allKnownIssuesFromBuildIn.ToList();
+        }
+        public async Task<KnownIssue?> GetKnownIssuesById(int id)
+        {
+            var allKnownIssues = await GetKnownIssues();
+            return allKnownIssues.FirstOrDefault(x => x.Id == id);
         }
     }
 }

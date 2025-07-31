@@ -1,13 +1,28 @@
-﻿@inherits LayoutComponentBase
+﻿@using System
+@inherits LayoutComponentBase
 
-<div class="custom-layout">
-    <div class="custom-sidbar">
-        <NavMenu />
-    </div>
+<ErrorBoundary ErrorContent="ErrorContent">
+    <ChildContent>
+        <div class="custom-layout">
+            <div class="custom-sidbar">
+                <NavMenu />
+            </div>
 
-    <main >
-        <div class="page-container">
-            @Body
+            <main >
+                <div class="page-container">
+                    @Body
+                </div>
+            </main>
         </div>
-    </main>
-</div>
+    </ChildContent>
+</ErrorBoundary>
+
+@code {
+    private RenderFragment<Exception> ErrorContent => ex => builder =>
+    {
+        builder.OpenElement(0, "div");
+        builder.AddAttribute(1, "style", "color: red; font-weight: bold; margin: 20px;");
+        builder.AddContent(2, $"An error occurred: {ex}");
+        builder.CloseElement();
+    };
+}

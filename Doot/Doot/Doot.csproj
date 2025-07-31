@@ -64,6 +64,7 @@
       <Content Include="Resources\Images\dotnet_bot.svg" BaseSize="168,208">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Remove="BotModel\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -86,6 +87,7 @@
 
     <ItemGroup>
       <None Include="wwwroot\Images\search.png" />
+      <None Remove="BotModel\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -95,7 +97,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="BotModel\" />
+      <MauiXaml Remove="BotModel\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="BotModel\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="BotModel\**" />
     </ItemGroup>
 
 </Project>
